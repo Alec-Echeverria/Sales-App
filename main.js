@@ -3,41 +3,60 @@ const desktopMenu=document.querySelector(".desktop-menu");
 const menuHamIcon=document.querySelector(".menu");
 const mobileMenu=document.querySelector(".mobile-menu");
 const menuCarroIcon=document.querySelector(".navbar-shopping-cart");
-const aside=document.querySelector(".product-detail");
+const shoppingCartContainer=document.querySelector("#shoppingCartContainer");
 const productList=[];                                                   //Array  donde se almacenaran productos
 const cardsContainer=document.querySelector(".cards-container")                  //Selector de donde se guardan las cards
+const productDetailContainer=document.querySelector("#productDetail")       //Aside del detalle del producto
+const productDetailCloseIcon=document.querySelector(".product-detail-close") //Icono de cerrado del Aside de producto
+
 
 //Funcion para mostrar menu desktop
 function toogleDesktopMenu(){
-    const isAsideClosed=aside.classList.contains("inactive");
+    const isshoppingCartContainerClosed=shoppingCartContainer.classList.contains("inactive");
+    const isProductDetailAsideClosed=productDetailContainer.classList.contains("inactive");
 
-    if(!isAsideClosed){    
-        aside.classList.add("inactive") //Si el menu del carro de compras esta abierto lo cerramos
+    if(!isshoppingCartContainerClosed){    
+        shoppingCartContainer.classList.add("inactive") //Si el menu del carro de compras esta abierto lo cerramos
     }else{
-        aside.classList.add("inactive")
+        shoppingCartContainer.classList.add("inactive")
     }
+
+    if(!isProductDetailAsideClosed){    
+        productDetailContainer.classList.add("inactive") //Si el aside de producto esta abierto lo cerramos
+    }else{
+        productDetailContainer.classList.add("inactive")
+    }
+
 
     desktopMenu.classList.toggle("inactive");  //Activamos menu de salida
 }
 
 //Funcion para mostrar menu mobile
 function tooglemobileMenu(){
+    const isshoppingCartContainerClosed=shoppingCartContainer.classList.contains("inactive");
+    const isProductDetailAsideClosed=productDetailContainer.classList.contains("inactive");
 
-    const isAsideClosed=aside.classList.contains("inactive");
-
-        if(!isAsideClosed){    
-            aside.classList.add("inactive") //Si el menu mobile esta abierto lo cerramos
+        if(!isshoppingCartContainerClosed){    
+            shoppingCartContainer.classList.add("inactive") //Si el menu caeerito de compras esta abierto lo cerramos
         }else{
-            aside.classList.add("inactive")
+            shoppingCartContainer.classList.add("inactive")
+        }
+
+
+        if(!isProductDetailAsideClosed){    
+            productDetailContainer.classList.add("inactive") //Si el aside de producto esta abierto lo cerramos
+        }else{
+            productDetailContainer.classList.add("inactive")
         }
 
         mobileMenu.classList.toggle("inactive");  //Activamos menu mobile
 }
 
-//Funcion para mostrar aside de carrito de compras
+//Funcion para mostrar shoppingCartContainer de carrito de compras
 function toogleshoppingcarthMenu(){
     const isMobileMenuClosed=mobileMenu.classList.contains("inactive");
     const isDesktopMenuClosed=desktopMenu.classList.contains("inactive");
+    const isProductDetailAsideClosed=productDetailContainer.classList.contains("inactive");
 
         if(!isMobileMenuClosed){    
             mobileMenu.classList.add("inactive") //Si el menu mobile esta abierto lo cerramos
@@ -51,7 +70,46 @@ function toogleshoppingcarthMenu(){
             desktopMenu.classList.add("inactive")
         }
 
-    aside.classList.toggle("inactive");  //Activamos el menu del carro de compras
+        if(!isProductDetailAsideClosed){    
+            productDetailContainer.classList.add("inactive") //Si el aside de producto esta abierto lo cerramos
+        }else{
+            productDetailContainer.classList.add("inactive")
+        }
+
+    shoppingCartContainer.classList.toggle("inactive");  //Activamos el menu del carro de compras
+}
+
+//Funcion para mostrar aside del producto
+function openProductDetailAside(){
+    const isMobileMenuClosed=mobileMenu.classList.contains("inactive");
+    const isDesktopMenuClosed=desktopMenu.classList.contains("inactive");
+    const isshoppingCartContainerClosed=shoppingCartContainer.classList.contains("inactive");
+
+    if(!isMobileMenuClosed){    
+        mobileMenu.classList.add("inactive") //Si el menu mobile esta abierto lo cerramos
+    }else{
+        mobileMenu.classList.add("inactive")
+    }
+
+    if(!isDesktopMenuClosed){    
+        desktopMenu.classList.add("inactive") //Si el menu del correo esta abierto lo cerramos
+    }else{
+        desktopMenu.classList.add("inactive")
+    }
+    if(!isshoppingCartContainerClosed){    
+        shoppingCartContainer.classList.add("inactive") //Si el menu de carro de compras esta abierto lo cerramos
+    }else{
+        shoppingCartContainer.classList.add("inactive")
+    }
+
+
+
+    productDetailContainer.classList.remove("inactive")         //Removemos la clase inactive y activamos el aside
+}
+
+//Funcion para cerrar aside del producto
+function closeProductDetailAside(){
+    productDetailContainer.classList.add("inactive")         //Añadimos la clase inactive
 }
 
 /* 
@@ -76,8 +134,10 @@ function renderProduct(array){
         const productCard= document.createElement("div");    //Creamos elemento Div
         productCard.classList.add("product-card");           //Asignamos la clase al elemento Div (product-card)
     
-        const img= document.createElement("img");
-        img.setAttribute("src",product.image);          //Modificamos el atributo src de img y le agregamos la propiedad img del objeto
+        const productImg= document.createElement("img");
+        productImg.setAttribute("src",product.image);          //Modificamos el atributo src de img y le agregamos la propiedad img del objeto
+
+        productImg.addEventListener("click",openProductDetailAside)   //Si la imagen creada escucha el evento de click
     
         const productInfo= document.createElement("div");    //Creamos segundo elemento Div
         productInfo.classList.add("product-info");           //Asignamos la clase al elemento Div (product-info)
@@ -98,7 +158,7 @@ function renderProduct(array){
         productInfoFifure.appendChild(productImgCart);   //insertamos el hijo (img) en el padre (figure)
     
         productInfo.append(productInfoDiv,productInfoFifure);    //insertamos los hijos (div y figure) en el padre (div.product-info)
-        productCard.append(img,productInfo);                     //insertamos los hijos (img y div.product-info) en el padre (div.product-card)
+        productCard.append(productImg,productInfo);                     //insertamos los hijos (img y div.product-info) en el padre (div.product-card)
         
         cardsContainer.append(productCard);              
     }
@@ -113,6 +173,8 @@ menuHamIcon.addEventListener("click",tooglemobileMenu)
 //Activar aside de carrito de compras si dan click
 menuCarroIcon.addEventListener("click",toogleshoppingcarthMenu)
 
+//Cerra aside de producto
+productDetailCloseIcon.addEventListener("click",closeProductDetailAside)
 
 //Agregar nuevo producto al array
 productList.push({
